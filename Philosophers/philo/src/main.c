@@ -3,116 +3,133 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: vampaier2 <vampaier2@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 12:46:54 by xalves            #+#    #+#             */
-/*   Updated: 2025/09/25 11:45:56 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/08 19:41:03 by vampaier2        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "main.h"
 
-pthread_mutex_t	mutex;
-int				mails = 0;
-
-void	*ft_calloc(size_t nmemb, size_t size)
+long	ft_get_time(void)
 {
-	void			*ptr;
-	size_t			m;
-	size_t			i;
-	unsigned char	*ptr_aux;
+	struct timeval	tv;
 
-	m = nmemb * size;
-	if (nmemb == 0 || size == 0)
-		return (malloc(0));
-	if (nmemb > (m / size))
-		return (NULL);
-	ptr = malloc(nmemb * size);
-	if (ptr == NULL)
-		return (NULL);
-	i = 0;
-	ptr_aux = (unsigned char *)ptr;
-	while (i < m)
-	{
-		ptr_aux[i] = 0;
-		i++;
-	}
-	return (ptr_aux);
+	if (gettimeofday(&tv, NULL) == -1)
+		return (-1);
+	return (tv.tv_sec * 1000L + tv.tv_usec / 1000L);
 }
 
-/// @brief checks if the string there are only digits(and +-)
-/// @param str string to check
-/// @return 0 if error, 1 of not
-int	ft_str_isdigit(char *str)
+long	get_timesincestart(long pstart_time)
 {
-	int	i;
+	return (ft_get_time() - pstart_time);
+}
 
-	i = 0;
-	if (!str || str[0] == '\0')
+int	odd_or_even (int id)
+{
+	if (id % 2 == 0)// Par
+		return (2);
+	else //Impar
 		return (1);
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	if (str[i] == '\0')
-		return (1);
-	while (str[i])
+	return (0);
+}
+
+void	lock_forks(t_philo *philo)
+{
+	if (odd_or_even(philo->id) == 2)//par - right->left
 	{
-		if (str[i] < '0' || str[i] > '9')
+		pthread_mutex_lock(philo->r_fork);
+		printf("%ld %d  has taken a fork\n", get_timesincestart(philo->manager->pstart_time), philo->id);
+		pthread_mutex_lock(philo->l_fork);
+		printf("%ld %d  has taken a fork\n", get_timesincestart(philo->manager->pstart_time), philo->id);
+	}
+	else//impar- left->right
+	{
+		pthread_mutex_lock(philo->l_fork);
+		printf("%ld %d  has taken a fork\n", get_timesincestart(philo->manager->pstart_time), philo->id);
+		pthread_mutex_lock(philo->r_fork);
+		printf("%ld %d  has taken a fork\n", get_timesincestart(philo->manager->pstart_time), philo->id);
+	}
+}
+
+void unlock_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+}
+//eat function
+void	*eat(t_philo *philo)
+{
+	lock_forks(philo);
+	printf("%ld %d is eating\n",
+		get_timesincestart(philo->manager->pstart_time),
+		philo->id);
+	philo->last_time_eat = ft_get_time();
+	usleep(philo->manager->time_to_eat * 1000);
+	unlock_forks(philo);
+
+	philo->n_meals++;
+	if (philo->n_meals == philo->manager->number_oftotal_meals)
+	{//stop thread??? i don't know
+		if (pthread_join(philo->thread, NULL) != 0)
+			return (NULL);
+	}
+	return (philo);
+}
+
+long	time_since_last_eat(t_philo *philo)
+{
+	return (ft_get_time() - philo->last_time_eat);
+}
+
+int	check_if_philo_died(t_philo *philo)
+{
+	if (time_since_last_eat(philo) >= philo->manager->time_to_die)
+		return (printf("%ld %d died\n", get_timesincestart(philo->manager->pstart_time) , philo->id), 1);
+	return (0);
+}
+
+int	smartsleep(t_philo *philo)
+{
+	long	start_time;
+
+	start_time = ft_get_time();
+	while (philo->manager->time_to_sleep > start_time)
+	{
+		if (check_if_philo_died(philo) == 1)
 			return (1);
-		i++;
+		usleep(500);
+		start_time += 500;
 	}
 	return (0);
 }
 
-int	ft_atoi(const char *nptr)
-{
-	int	res;
-	int	sign;
-	int	i;
-
-	res = 0;
-	sign = 1;
-	i = 0;
-	while (nptr[i] == ' ' || (nptr[i] >= '\t' && nptr[i] <= '\r'))
-		i++;
-	if (nptr[i] == '+' || nptr[i] == '-')
-	{
-		if (nptr[i] == '-')
-			sign *= -1;
-		i++;
-	}
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		res = res * 10 + (nptr[i] - '0');
-		i++;
-	}
-	return (sign * res);
-}
-
+// pthread_mutex_lock
 void *routine(void *arg)
 {
-	t_philo *philo = (t_philo *)arg;
-	/* int		i;
+	t_philo	*philo = (t_philo *)arg;
 
-	i = 0;
-	while (i < 1000)
+	if (philo.manager.n_philos)// if only 1 philo-------------
+		one_philo(philo);
+	else
 	{
-		pthread_mutex_lock(&mutex);
-		mails++;
-		pthread_mutex_unlock(&mutex);
-		i++;
-	} */
-	while (1)
-	{
-		printf("|Time| %d is thinking \n", philo->id);
-		usleep(1000 * 1000); // STILL NEED SOME CHANGES
-		printf("|Time| %d is eating \n", philo->id);
-		usleep(philo->manager.time_to_eat * 1000);
-		philo->n_meals++;
-		if (philo->n_meals == philo->manager.number_oftotal_meals)
-			if (pthread_join(philo->thread, NULL) != 0)
-				return (printf("|Time| %d has eaten his last meal\n", philo->id), NULL);
-		printf("|Time| %d is sleeping \n", philo->id);
-		usleep(philo->manager.time_to_sleep * 1000);
+		while (1)
+		{
+			/* if(check_if_philo_died(philo) == 1) // check if died before
+				return (NULL); */
+			if (eat(philo) == NULL)
+				return (NULL);
+			/* if(check_if_philo_died(philo) == 1) // check if died after
+				return (NULL); */
+			//------------------sleeping----------------------
+			printf("%ld %d is sleeping\n", get_timesincestart(philo->manager->pstart_time) , philo->id);
+			if (smartsleep(philo) == 1)
+				return (NULL);
+			//usleep(philo->manager->time_to_sleep * 1000);
+			//------------------thinking----------------------
+			printf("%ld %d is thinking\n", get_timesincestart(philo->manager->pstart_time) , philo->id);
+		}
 	}
 	return (NULL);
 }
@@ -121,19 +138,55 @@ void *routine(void *arg)
 /// @brief creates new struct
 /// @param content content to be given new struct
 /// @return returns the created struct
-t_philo	*ft_createphilo(int i, t_manager manager)
+int	ft_createphilo(t_philo *philo, int i, t_manager *manager)
 {
-	t_philo	*new_struct;
+	philo->id = i + 1;
+	philo->manager = manager;
+	philo->n_meals = 0;
+	philo->last_time_eat = ft_get_time();
+	//---------FORKS---------
+	//Left
+	if (i == 0)//if first philo
+		philo->l_fork = &manager->forks[manager->n_philos - 1];
+	else
+		philo->l_fork = &manager->forks[i - 1];
+	//Right
+	philo->r_fork = &manager->forks[i];
+	if (pthread_create(&philo->thread, NULL, &routine, philo) != 0)
+		return (1);
+	return (0);
+}
 
-	new_struct = malloc(sizeof(t_philo));
-	if (!new_struct)
-		return (NULL);
-	new_struct->id = i + 1;
-	new_struct->manager = manager;
-	new_struct->n_meals = 0;
-	if (pthread_create(&new_struct->thread, NULL, &routine, new_struct) != 0)
-		return (printf("Error while creating philosofer\n"), NULL);
-	return (new_struct);
+int	init_arrforks(t_manager	*manager)
+{
+	int	i;
+
+	i = 0;
+
+	manager->forks = ft_calloc(sizeof(pthread_mutex_t), manager->n_philos);
+	if (manager->forks == NULL)
+		return (1);
+	while (i < manager->n_philos)
+	{
+		if (pthread_mutex_init(&manager->forks[i], NULL) != 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	ft_free_philo(t_manager *manager)
+{
+	int		i;
+
+	i = 0;
+	while (i < manager->n_philos)
+	{
+		//printf("Philosopher %d was freed\n", manager->arr_philos[i].id);
+		pthread_mutex_destroy(&manager->forks[i]);
+		i++;
+	}
+	free(manager->arr_philos);
 }
 
 t_manager	*ft_createmanager(int argc, char **argv)
@@ -151,74 +204,47 @@ t_manager	*ft_createmanager(int argc, char **argv)
 		new_struct->number_oftotal_meals = ft_atoi(argv[5]);
 	else
 		new_struct->number_oftotal_meals = -1;
+	new_struct->pstart_time = ft_get_time();
+	new_struct->arr_philos = ft_calloc(sizeof(t_philo), new_struct->n_philos);
+	if (init_arrforks(new_struct) == 1)
+		return (ft_free_philo(new_struct), NULL);
 	return (new_struct);
-}
-
-void	ft_free_philo(t_philo **stack, int n_philos)
-{
-	int		i;
-
-	i = 0;
-	while (i < n_philos)
-	{
-		printf("Philosopher %d was freed\n", stack[i]->id);
-		free(stack[i]);
-		i++;
-	}
-	free(stack);
 }
 
 int	main(int argc, char *argv[])
 {
-	t_philo		**arr_philos;
-	t_philo		*aux_philo;
-	t_manager	*manager;
-	int			n_philos;
-	int			i;
+	t_manager		*manager;
+	int				i;
+	//pthread_mutex_t	*mutex;
 
-	// -------------- Parcing ---------------
-	if (argc < 4)
-		return (printf("Not enough arguments!\n"), 1);
-	if (argc > 6)
-		return (printf("Too many arguments!\n"), 1);
-	if (ft_str_isdigit(argv[1]) || !ft_atoi(argv[1]) || ft_atoi(argv[1]) < 0)
-		return (printf("Error on number of Philosofers !\n"), 1);
-	if (ft_str_isdigit(argv[2]) || !ft_atoi(argv[2]) || ft_atoi(argv[2]) < 0)
-		return (printf("Error on time_to_die!\n"), 1);
-	if (ft_str_isdigit(argv[3]) || !ft_atoi(argv[3]) || ft_atoi(argv[3]) < 0)
-		return (printf("Error on time_to_eat!\n"), 1);
-	if (ft_str_isdigit(argv[4]) || !ft_atoi(argv[4]) || ft_atoi(argv[4]) < 0)
-		return (printf("Error on time_to_sleep!\n"), 1);
-	if (argc == 6)
-		if (ft_str_isdigit(argv[5]) || !ft_atoi(argv[5]) || ft_atoi(argv[5]) < 0)
-			return (printf("Error on number_oftotal_meals!\n"), 1);
-	// -------------------------------------
-	// ---------- Create Manager -----------
+//-------------- Parcing -------------------
+	if (parcing(argc, argv) == 1)
+		return (1);	
+//----------- Create Manager ---------------
 	manager = ft_createmanager(argc, argv);
-	// ---------- Create Philosophers ------------
-	n_philos = ft_atoi(argv[1]);
-	arr_philos = ft_calloc(n_philos, sizeof(t_philo *));
+	if (manager == NULL)
+		return (printf("\n\nError creating manager!\n"), 1);
+//---------- Create Philosophers ------------
 	i = 0;
-	while (i < n_philos)
+	while (i < manager->n_philos)
 	{
-		aux_philo = ft_createphilo(i, *manager);
-		if (!aux_philo)
-			return (printf("Error on philosofer creation!\n"), 1);
-		arr_philos[i] = aux_philo;
-		//printf("Thread %d has started.\n", arr_philos[i]->id);
+		if (ft_createphilo(&manager->arr_philos[i], i, manager) == 1)
+		{
+			printf("\n\nError creating philosofer[%d]!\n", i + 1);
+			return (ft_free_philo(manager), 1);
+		}
 		i++;
 	}
 	i = 0;
-	while (i < n_philos)
+	while (i < manager->n_philos) // join threads
 	{
-		if (pthread_join(arr_philos[i]->thread, NULL) != 0)
+		if (pthread_join(manager->arr_philos[i].thread, NULL) != 0)
 			return (printf("Error on pthread_join!\n"), 1);
-		printf("Thread %d has finished.\n", arr_philos[i]->id);
+		//printf("Thread %d has finished.\n", manager->arr_philos[i].id);
 		i++;
 	}
-	pthread_mutex_destroy(&mutex);
-	//printf("Number of mails: %d\n", mails);
-	ft_free_philo(arr_philos, n_philos);
+//pthread_mutex_destroy(mutex);
+	ft_free_philo(manager);
 	free(manager);
 	return (0);
 }
