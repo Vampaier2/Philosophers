@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   aux.h                                              :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 12:30:39 by vampaier2         #+#    #+#             */
-/*   Updated: 2026/02/09 12:12:22 by xalves           ###   ########.fr       */
+/*   Created: 2026/02/09 12:06:43 by xalves            #+#    #+#             */
+/*   Updated: 2026/02/09 12:07:58 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef AUX_H
-# define AUX_H
+#include "main.h"
 
-# include "../main.h"
+long	ft_get_time(void)
+{
+	struct timeval	tv;
 
-int		ft_atoi(const char *nptr);
-void	*ft_calloc(size_t nmemb, size_t size);
-int     odd_or_even (int id);
+	if (gettimeofday(&tv, NULL) == -1)
+		return (-1);
+	return (tv.tv_sec * 1000L + tv.tv_usec / 1000L);
+}
 
-#endif
+long	get_timesincestart(long pstart_time)
+{
+	return (ft_get_time() - pstart_time);
+}
+
+long	time_since_last_eat(t_philo *philo)
+{
+	return (ft_get_time() - philo->last_time_eat);
+}

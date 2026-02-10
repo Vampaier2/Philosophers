@@ -6,7 +6,7 @@ SRC_DIR = src
 OBJ_DIR = obj
 
 # Source files
-SRC_FILES = main.c
+SRC_FILES = main.c time.c forks.c philo.c routine.c
 
 # Object files
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))

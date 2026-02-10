@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vampaier2 <vampaier2@student.42.fr>        +#+  +:+       +#+         #
+#    By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 11:56:33 by msimoes           #+#    #+#              #
-#    Updated: 2026/01/26 13:26:20 by vampaier2        ###   ########.fr        #
+#    Updated: 2026/02/09 12:12:29 by xalves           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = lib_aux.a
-AUXS = ft_atoi.c ft_calloc.c
+AUXS = ft_atoi.c ft_calloc.c odd_or_even.c
 
 COMP_LIB = ar rcs
 RM = rm -f

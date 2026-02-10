@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   aux.h                                              :+:      :+:    :+:   */
+/*   odd_or_even.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 12:30:39 by vampaier2         #+#    #+#             */
-/*   Updated: 2026/02/09 12:12:22 by xalves           ###   ########.fr       */
+/*   Created: 2026/02/09 12:11:46 by xalves            #+#    #+#             */
+/*   Updated: 2026/02/09 12:12:03 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef AUX_H
-# define AUX_H
+#include "aux.h"
 
-# include "../main.h"
-
-int		ft_atoi(const char *nptr);
-void	*ft_calloc(size_t nmemb, size_t size);
-int     odd_or_even (int id);
-
-#endif
+int	odd_or_even (int id)
+{
+	if (id % 2 == 0)// Par
+		return (2);
+	else //Impar
+		return (1);
+	return (0);
+}
