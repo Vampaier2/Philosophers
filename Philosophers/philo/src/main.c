@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 12:46:54 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/09 15:49:22 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/10 15:35:22 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ t_param ft_createparam(int argc, char **argv)
 		new_struct.number_oftotal_meals = -1;
 	return (new_struct);
 }
-
-
 
 t_manager	*ft_createmanager(int argc, char **argv)
 {
@@ -49,11 +47,37 @@ t_manager	*ft_createmanager(int argc, char **argv)
 	return (new_struct);
 }
 
+void *monitor(void *arg)
+{
+    t_manager *manager = (t_manager *)arg;
+    int i;
+
+    while (1)
+    {
+        i = 0;
+        while (i < manager->param.n_philos)
+        {
+            if (time_since_last_eat(&manager->arr_philos[i]) >= manager->param.time_to_die)
+            {
+                msg(manager, manager->arr_philos[i].id, "died");
+                pthread_mutex_lock(&manager->deadflag_mutex);
+                manager->dead_flag = 1;
+                pthread_mutex_unlock(&manager->deadflag_mutex);
+                return (NULL);
+            }
+            i++;
+        }
+        if (checkdead_flag(manager) == 1)
+            return (NULL);
+        usleep(500);
+    }
+    return (NULL);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_manager		*manager;
 	int				i;
-	//pthread_mutex_t	*mutex;
 
 //-------------- Parcing -------------------
 	if (parcing(argc, argv) == 1)
@@ -62,7 +86,15 @@ int	main(int argc, char *argv[])
 	manager = ft_createmanager(argc, argv);
 	if (manager == NULL)
 		return (printf("\n\nError creating manager!\n"), 1);
-//---------- Create Philosophers ------------
+
+ 	if (manager->param.n_philos == 1)
+    {
+        printf("0 1 has taken a fork\n");
+        usleep(manager->param.time_to_die * 1000);
+        printf("%ld 1 died\n", manager->param.time_to_die);
+        return (1);
+    }
+	//---------- Create Philosophers ------------
 	i = 0;
 	while (i < manager->param.n_philos)
 	{
@@ -73,6 +105,9 @@ int	main(int argc, char *argv[])
 		}
 		i++;
 	}
+	//pthread_create(&manager->monitor_thread, NULL, &monitor, manager);
+	
+
 	i = 0;
 	while (i < manager->param.n_philos) // join threads
 	{
@@ -81,7 +116,8 @@ int	main(int argc, char *argv[])
 		//printf("Thread %d has finished.\n", manager->arr_philos[i].id);
 		i++;
 	}
-//pthread_mutex_destroy(mutex);
+	//pthread_join(manager->monitor_thread, NULL);
+	//pthread_mutex_destroy(mutex);
 	ft_free_philo(manager);
 	free(manager);
 	return (0);

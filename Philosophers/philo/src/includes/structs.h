@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 12:19:06 by vampaier2         #+#    #+#             */
-/*   Updated: 2026/02/09 15:50:25 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/10 15:32:38 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ typedef struct s_list
 typedef struct s_param
 {
 	int				n_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				number_oftotal_meals;
-	
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
+	long			number_oftotal_meals;
 }	t_param;
 
 typedef struct s_manager	t_manager;
@@ -58,6 +57,9 @@ typedef struct s_manager
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	deadflag_mutex;
+/* 	pthread_t		monitor_thread;
+	int             meals_done;     
+    pthread_mutex_t mealsdone_mutex; */
 }				t_manager;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 12:32:16 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/09 15:35:56 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/10 14:47:50 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void    *routine(void *arg);
 void    *eat(t_philo *philo);
 int     check_if_philo_died(t_philo *philo);
 int     smartsleep(t_philo *philo);
+int checkdead_flag(t_manager *manager);
 
 void	msg(t_manager *manager, int id, char *action);
 
