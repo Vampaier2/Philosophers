@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 12:32:16 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/10 14:47:50 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/11 18:05:31 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void    ft_free_philo(t_manager *manager);
 // routine funcs
 void    *routine(void *arg);
 void    *eat(t_philo *philo);
-int     check_if_philo_died(t_philo *philo);
+int     check_if_philo_died(t_manager	*manager);
 int     smartsleep(t_philo *philo);
-int checkdead_flag(t_manager *manager);
+bool     checkdead_flag(t_mutex_man *mutex_man);
 
-void	msg(t_manager *manager, int id, char *action);
+void    msg(t_mutex_man *mutex_man, int id, char *action);
 
 #endif

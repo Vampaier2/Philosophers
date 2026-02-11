@@ -6,11 +6,23 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:20:17 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/09 15:50:04 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/11 17:35:03 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+int	create_mutex(t_manager *manager)
+{
+	manager->mutex_man.param = manager->param;
+	manager->mutex_man.forks = ft_calloc(sizeof(pthread_mutex_t), manager->param.n_philos);
+	if (!manager->mutex_man.forks)
+		return (1);
+	manager->mutex_man.philo_lock = ft_calloc(sizeof(pthread_mutex_t), manager->param.n_philos);
+	if (!manager->mutex_man.philo_lock)
+		return (1);
+	return (0);
+}
 
 // -------------- struct funcs -----------------------
 /// @brief creates new struct
@@ -19,20 +31,19 @@
 int	ft_createphilo(t_philo *philo, int i, t_manager *manager)
 {
 	philo->id = i + 1;
-	philo->manager = manager;
+	philo->mutex_man = &manager->mutex_man;
 	philo->n_meals = 0;
 	philo->last_time_eat = ft_get_time();
 	philo->param = manager->param;
 	//---------FORKS---------
 	//Left
 	if (i == 0)//if first philo
-		philo->l_fork = &manager->forks[philo->param.n_philos - 1];
+		philo->l_fork = &manager->mutex_man.forks[philo->param.n_philos - 1];
 	else
-		philo->l_fork = &manager->forks[i - 1];
+		philo->l_fork = &manager->mutex_man.forks[i - 1];
 	//Right
-	philo->r_fork = &manager->forks[i];
-	philo->pstart_time = manager->pstart_time;
-	if (pthread_create(&philo->thread, NULL, &routine, philo) != 0)
+	philo->r_fork = &manager->mutex_man.forks[i];
+	if (pthread_create(&philo->thread, NULL, &routine, manager) != 0)
 		return (1);
 	return (0);
 }
@@ -45,8 +56,10 @@ void	ft_free_philo(t_manager *manager)
 	while (i < manager->param.n_philos)
 	{
 		//printf("Philosopher %d was freed\n", manager->arr_philos[i].id);
-		pthread_mutex_destroy(&manager->forks[i]);
+		pthread_mutex_destroy(&manager->mutex_man.forks[i]);
+		pthread_mutex_destroy(&manager->arr_philos[i].last_eat_mutex);
 		i++;
 	}
+	//free(&manager->mutex_man.forks);
 	free(manager->arr_philos);
 }

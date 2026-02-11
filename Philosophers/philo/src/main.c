@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 12:46:54 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/10 15:35:22 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/11 18:03:14 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_param ft_createparam(int argc, char **argv)
 		new_struct.number_oftotal_meals = ft_atoi(argv[5]);
 	else
 		new_struct.number_oftotal_meals = -1;
+	new_struct.pstart_time = ft_get_time();
 	return (new_struct);
 }
 
@@ -35,16 +36,31 @@ t_manager	*ft_createmanager(int argc, char **argv)
 	if (!new_struct)
 		return (NULL);
 	new_struct->param = ft_createparam(argc, argv);
-	new_struct->pstart_time = ft_get_time();
-	new_struct->dead_flag = 0;
-	if (pthread_mutex_init(&new_struct->print_mutex, NULL) != 0)
-			return (NULL);
-	if (pthread_mutex_init(&new_struct->deadflag_mutex, NULL) != 0)
-			return (NULL);
 	new_struct->arr_philos = ft_calloc(sizeof(t_philo), new_struct->param.n_philos);
 	if (init_arrforks(new_struct) == 1)
-		return (ft_free_philo(new_struct), NULL);
+	return (ft_free_philo(new_struct), NULL);
 	return (new_struct);
+}
+
+
+int	check_if_philo_died(t_manager	*manager)
+{
+	int i;
+		
+	i = 0;
+	while (&manager->arr_philos[i])
+	{
+		if (time_since_last_eat(&manager->arr_philos[i]) > manager->param.time_to_die)
+		{
+			msg(&manager->mutex_man, i + 1, "died");
+			pthread_mutex_lock(&manager->mutex_man.deadflag_mutex);
+			manager->mutex_man.dead_flag = 1;
+			pthread_mutex_unlock(&manager->mutex_man.deadflag_mutex);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }
 
 void *monitor(void *arg)
@@ -59,15 +75,15 @@ void *monitor(void *arg)
         {
             if (time_since_last_eat(&manager->arr_philos[i]) >= manager->param.time_to_die)
             {
-                msg(manager, manager->arr_philos[i].id, "died");
-                pthread_mutex_lock(&manager->deadflag_mutex);
-                manager->dead_flag = 1;
-                pthread_mutex_unlock(&manager->deadflag_mutex);
+                msg(&manager->mutex_man, manager->arr_philos[i].id, "died");
+                pthread_mutex_lock(&manager->mutex_man.deadflag_mutex);
+                manager->mutex_man.dead_flag = 1;
+                pthread_mutex_unlock(&manager->mutex_man.deadflag_mutex);
                 return (NULL);
             }
             i++;
         }
-        if (checkdead_flag(manager) == 1)
+        if (checkdead_flag(&manager->mutex_man) == 1)
             return (NULL);
         usleep(500);
     }
@@ -105,9 +121,9 @@ int	main(int argc, char *argv[])
 		}
 		i++;
 	}
-	//pthread_create(&manager->monitor_thread, NULL, &monitor, manager);
+	/* pthread_create(&manager->monitor_thread, NULL, &monitor, manager); */
 	
-
+	
 	i = 0;
 	while (i < manager->param.n_philos) // join threads
 	{
@@ -116,7 +132,7 @@ int	main(int argc, char *argv[])
 		//printf("Thread %d has finished.\n", manager->arr_philos[i].id);
 		i++;
 	}
-	//pthread_join(manager->monitor_thread, NULL);
+	pthread_join(manager->monitor_thread, NULL);
 	//pthread_mutex_destroy(mutex);
 	ft_free_philo(manager);
 	free(manager);

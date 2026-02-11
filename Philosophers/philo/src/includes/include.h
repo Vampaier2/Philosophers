@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vampaier2 <vampaier2@student.42.fr>        +#+  +:+       +#+        */
+/*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:58:50 by vampaier2         #+#    #+#             */
-/*   Updated: 2026/01/29 11:07:52 by vampaier2        ###   ########.fr       */
+/*   Updated: 2026/02/11 14:55:07 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>    // write, usleep
 # include <sys/time.h>  // gettimeofday
 # include <pthread.h>   // pthread_* (threads + mutexes)
+# include <stdbool.h>   //booleans
 //--------------------------------------
 //----------------Files-----------------
 # include "../main.h"
