@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: vampaier2 <vampaier2@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 12:46:54 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/11 18:03:14 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/16 15:34:29 by vampaier2        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_if_philo_died(t_manager	*manager)
 	int i;
 		
 	i = 0;
-	while (&manager->arr_philos[i])
+	while (i < manager->param.n_philos)
 	{
 		if (time_since_last_eat(&manager->arr_philos[i]) > manager->param.time_to_die)
 		{
@@ -102,7 +102,8 @@ int	main(int argc, char *argv[])
 	manager = ft_createmanager(argc, argv);
 	if (manager == NULL)
 		return (printf("\n\nError creating manager!\n"), 1);
-
+	if (create_mutex(manager))
+    	return (ft_free_philo(manager), 1);
  	if (manager->param.n_philos == 1)
     {
         printf("0 1 has taken a fork\n");

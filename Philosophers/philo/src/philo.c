@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: vampaier2 <vampaier2@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:20:17 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/11 17:35:03 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/16 14:05:12 by vampaier2        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_createphilo(t_philo *philo, int i, t_manager *manager)
 		philo->l_fork = &manager->mutex_man.forks[i - 1];
 	//Right
 	philo->r_fork = &manager->mutex_man.forks[i];
-	if (pthread_create(&philo->thread, NULL, &routine, manager) != 0)
+	if (pthread_create(&philo->thread, NULL, &routine, philo) != 0)
 		return (1);
 	return (0);
 }

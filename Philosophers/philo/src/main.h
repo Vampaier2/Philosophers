@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: vampaier2 <vampaier2@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 12:32:16 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/11 18:05:31 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/16 16:01:16 by vampaier2        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,16 @@ int     init_arrforks(t_manager	*manager);
 int     ft_createphilo(t_philo *philo, int i, t_manager *manager);
 void    ft_free_philo(t_manager *manager);
 
+
+int		create_mutex(t_manager *manager);
+
+
 // routine funcs
 void    *routine(void *arg);
-void    *eat(t_philo *philo);
+int		eat(t_philo *philo);
 int     check_if_philo_died(t_manager	*manager);
 int     smartsleep(t_philo *philo);
-bool     checkdead_flag(t_mutex_man *mutex_man);
+bool    checkdead_flag(t_mutex_man *mutex_man);
 
 void    msg(t_mutex_man *mutex_man, int id, char *action);
 
