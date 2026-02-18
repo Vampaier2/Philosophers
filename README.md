@@ -20,3 +20,5 @@ If the other fork is being used by other philosopher, the philosopher must wait 
 
 ## “Resources”
 ### A section listing classic references related to the topic (documen-tation, articles, tutorials, etc.), as well as a description of how AI was used —specifying for which tasks and which parts of the project.
+
+- 42 Philosophers en.subject.pdf
