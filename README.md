@@ -16,7 +16,7 @@ If the other fork is being used by other philosopher, the philosopher must wait 
 - `time_to_die (in milliseconds)` -> if a philosopher has not started eating within `time_to_die milliseconds` since the start of their last meal or the start of the simulation, they die.
 - `time_to_eat (in milliseconds)` -> The time it takes for a philosopher to eat.
 - `time_to_sleep (in milliseconds)` -> The time a philosopher will spend sleeping.
-- `number_of_times_each_philosopher_must_eat (optional argument)` -> If all philosophers have eaten at least `number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
+- `number_of_times_each_philosopher_must_eat (optional argument)` -> If all philosophers have eaten at least `number_of_times_each_philosopher_must_eat times`, the simulation stops.(If not specified, the simulation stops when a philosopher dies).
 
 ## “Resources”
 ### A section listing classic references related to the topic (documen-tation, articles, tutorials, etc.), as well as a description of how AI was used —specifying for which tasks and which parts of the project.
