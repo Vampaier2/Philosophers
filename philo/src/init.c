@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: vampaier2 <vampaier2@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 15:26:44 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/18 16:09:18 by xalves           ###   ########.fr       */
+/*   Updated: 2026/02/18 16:39:07 by vampaier2        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	init_philo(t_philo *philo, int id, t_data *data)
 	philo->l_fork = &data->mutex.forks[id];
 	philo->r_fork = &data->mutex.forks[(id + 1) % data->args.n_philos];
 }
+
 //create_table
 t_philo	*create_philos(t_data *data)
 {
