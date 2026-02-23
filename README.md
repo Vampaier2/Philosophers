@@ -5,8 +5,8 @@ Simulation of the classic Dining Philosophers problem.
 
 ## “Description”
 Simulates a configurable number of philosophers, each running in a concurrent process where they eat, sleep, and think.
-With each philosopher having _only 1 'fork'_ each, and they can only eat when they have 2 forks. (their fork on the fork of the other philosopher in the oposite side of their fork) 
-If the other fork is being used by other philosopher, the philosopher must wait until he has that fork available for use.
+With each philosopher having _only 1 'fork'_ each, and they can only eat when they have 2 forks. (their fork on the fork of the other philosopher in the opposite side of their fork) 
+If the other fork is being used by another philosopher, the philosopher must wait until he has that fork available for use.
 
 ## “Instructions”
 
@@ -38,11 +38,11 @@ Basic philosopher simulation:
 ```bash
 ./philo 5 800 200 200
 ```
-This will create a simulation with 5 philosophers which have 800ms `time_to_die`, 200ms `time_to_eat`,200ms `time_to_sleep`.
+This will create a simulation with 5 philosophers which have 800ms `time_to_die`, 200ms `time_to_eat`, 200ms `time_to_sleep`.
 ```bash
-./philo 5 800 200 200 7
+./philo 5 800 200 200 8
 ```
-The same has above, but now `count_eat` is 8, so they will only stop after 8 repeats(eating 8 times).
+Same as above, but now `count_eat` is 8, so they will only stop after 8 repeats(eating 8 times).
 
 ### Cleanup
 Remove object files:
