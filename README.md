@@ -35,6 +35,27 @@ make re
 - `time_to_sleep (in milliseconds)` -> The time a philosopher will spend sleeping.
 - `count_eat (optional argument)` -> If all philosophers have eaten at least `count_eat`, the simulation stops.(If not specified, the simulation stops when a philosopher dies).
 
+### Examples
+Basic philosopher simulation:
+```bash
+./philo 5 800 200 200
+```
+This will create a simulation with 5 philosophers which have 800ms time_to_die,200ms time_to_eat,200ms time_to_sleep.
+```bash
+./philo 5 800 200 200 7
+```
+The same has above, but now count_eat is 8, so they will only stop after 8 repeats(eating 8 times).
+
+### Cleanup
+Remove object files:
+```bash
+make clean
+```
+Remove object files and executable:
+```bash
+make fclean
+```
+
 ## Resources
 - [Youtube Code Vault -> Unix Threads in C](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2)
 - [Dining philosophers problem - Wikipedia](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
