@@ -35,7 +35,8 @@ make re
 - `time_to_sleep (in milliseconds)` -> The time a philosopher will spend sleeping.
 - `count_eat (optional argument)` -> If all philosophers have eaten at least `count_eat`, the simulation stops.(If not specified, the simulation stops when a philosopher dies).
 
-## “Resources”
-### A section listing classic references related to the topic (documen-tation, articles, tutorials, etc.), as well as a description of how AI was used —specifying for which tasks and which parts of the project.
-
+## Resources
+- [Youtube Code Vault -> Unix Threads in C](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2)
+- [Dining philosophers problem - Wikipedia](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
+- [pthread_mutex_init(3) — Linux manual page](https://www.man7.org/linux/man-pages/man3/pthread_mutex_lock.3.html)
 - 42 Philosophers en.subject.pdf
