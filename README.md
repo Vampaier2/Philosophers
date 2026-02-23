@@ -1,10 +1,10 @@
 This project has been created as part of the 42 curriculum by xalves
 
 # Philosophers
-Philosophers doing Philosophers things
+Simulation of the classic Dining Philosophers problem.
 
 ## “Description”
-**Philosophers** is a project where we simulate x amount of philosophers, on a process where they eat, sleep and think.
+Simulates a configurable number of philosophers, each running in a concurrent process where they eat, sleep, and think.
 With each philosopher having _only 1 'fork'_ each, and they can only eat when they have 2 forks. (their fork on the fork of the other philosopher in the oposite side of their fork) 
 If the other fork is being used by other philosopher, the philosopher must wait until he has that fork available for use.
 
