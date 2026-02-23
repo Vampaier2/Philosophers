@@ -24,7 +24,7 @@ make re
 ### Argumets
 
 ```bash
-./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_repeats]
+./philo n_philos time_to_die time_to_eat time_to_sleep [count_eat]
 ```
 
 - `n_philos` -> The number of philosophers and also the number of forks.
@@ -38,11 +38,11 @@ Basic philosopher simulation:
 ```bash
 ./philo 5 800 200 200
 ```
-This will create a simulation with 5 philosophers which have 800ms time_to_die,200ms time_to_eat,200ms time_to_sleep.
+This will create a simulation with 5 philosophers which have 800ms `time_to_die`, 200ms `time_to_eat`,200ms `time_to_sleep`.
 ```bash
 ./philo 5 800 200 200 7
 ```
-The same has above, but now count_eat is 8, so they will only stop after 8 repeats(eating 8 times).
+The same has above, but now `count_eat` is 8, so they will only stop after 8 repeats(eating 8 times).
 
 ### Cleanup
 Remove object files:
