@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 12:32:16 by xalves            #+#    #+#             */
-/*   Updated: 2026/04/23 22:31:37 by xalves           ###   ########.fr       */
+/*   Updated: 2026/04/24 14:12:05 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 long	ft_get_time(void);
 long	get_timesincestart(long pstart_time);
 long	time_since_last_eat(t_philo *philo);
+void	accurate_sleep(t_manager *manager, long time);
 
 // forks funcs
 void	lock_forks(t_philo *philo);

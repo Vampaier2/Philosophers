@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 12:46:54 by xalves            #+#    #+#             */
-/*   Updated: 2026/04/23 22:29:53 by xalves           ###   ########.fr       */
+/*   Updated: 2026/04/24 15:36:17 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,18 @@ int	handle_one_philo(char **argv)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+void	routines(t_manager *manager)
 {
-	t_manager		*manager;
-	int				i;
+	int	i;
 
-	if (parcing(argc, argv) == 1)
-		return (1);
-	if (handle_one_philo(argv) == 1)
-	{
-		return (0);
-	}
-	manager = ft_createmanager(argc, argv);
-	if (manager == NULL)
-		return (printf("\n\nError creating manager!\n"), 1);
 	i = 0;
 	while (i < manager->param.n_philos)
 	{
 		if (ft_createphilo(&manager->arr_philos[i], i, manager) == 1)
 		{
-			printf("\n\nError creating philosofer[%d]!\n", i + 1);
-			return (ft_free_philo(manager), 1);
+			printf("\n\nError creating philosopher[%d]!\n", i + 1);
+			ft_free_philo(manager);
+			return ;
 		}
 		i++;
 	}
@@ -96,6 +87,25 @@ int	main(int argc, char **argv)
 		pthread_join(manager->arr_philos[i].thread, NULL);
 		i++;
 	}
+}
+
+int	main(int argc, char **argv)
+{
+	t_manager		*manager;
+
+	if (parcing(argc, argv) == 1)
+		return (1);
+	if (handle_one_philo(argv) == 1)
+	{
+		return (0);
+	}
+	manager = ft_createmanager(argc, argv);
+	if (manager == NULL)
+		return (printf("\n\nError creating manager!\n"), 1);
+	routines(manager);
+	pthread_mutex_destroy(&manager->print_mutex);
+	pthread_mutex_destroy(&manager->checkdead_mutex);
+	pthread_mutex_destroy(&manager->eating_mutex);
 	ft_free_philo(manager);
 	free(manager);
 	return (0);

@@ -6,17 +6,17 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:11:46 by xalves            #+#    #+#             */
-/*   Updated: 2026/02/09 12:12:03 by xalves           ###   ########.fr       */
+/*   Updated: 2026/04/24 14:01:39 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "aux.h"
 
-int	odd_or_even (int id)
+int	odd_or_even(int id)
 {
-	if (id % 2 == 0)// Par
+	if (id % 2 == 0)
 		return (2);
-	else //Impar
+	else
 		return (1);
 	return (0);
 }

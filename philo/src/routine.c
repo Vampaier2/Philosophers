@@ -6,41 +6,11 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:25:50 by xalves            #+#    #+#             */
-/*   Updated: 2026/04/23 22:13:18 by xalves           ###   ########.fr       */
+/*   Updated: 2026/04/24 14:11:45 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
-
-void	accurate_sleep(t_manager *manager, long time)
-{
-	long	start;
-
-	start = ft_get_time();
-	while (ft_get_time() - start < time)
-	{
-		if (checkis_anyone_dead(manager) == true)
-			return ;
-		usleep(500);
-	}
-}
-
-/* void	ft_usleep(t_manager *manager, int time)
-{
-	long	start;
-	long	elapsed;
-
-	start = ft_get_time();
-	while (1)
-	{
-		if (checkis_anyone_dead(manager) == true)
-			return ;
-		elapsed = ft_get_time() - start;
-		if (elapsed >= time)
-			break ;
-		usleep(1000);
-	}
-} */
 
 void	msg(t_manager *manager, int id, char *action)
 {
@@ -56,22 +26,22 @@ void	msg(t_manager *manager, int id, char *action)
 	pthread_mutex_unlock(&manager->print_mutex);
 }
 
-//eat function
 void	eat(t_philo *philo)
 {
-
 	lock_forks(philo);
 	msg(philo->manager, philo->id, "is eating");
 	pthread_mutex_lock(&philo->manager->eating_mutex);
 	philo->last_time_eat = ft_get_time();
 	philo->n_meals++;
+	pthread_mutex_unlock(&philo->manager->eating_mutex);
+	accurate_sleep(philo->manager, philo->param.time_to_eat);
+	unlock_forks(philo);
+	pthread_mutex_lock(&philo->manager->eating_mutex);
 	if (philo->n_meals == philo->manager->param.number_oftotal_meals)
 	{
 		philo->manager->n_philo_finished_eating++;
 	}
 	pthread_mutex_unlock(&philo->manager->eating_mutex);
-	accurate_sleep(philo->manager, philo->param.time_to_eat);
-	unlock_forks(philo);
 }
 
 void	philo_sleep(t_philo *philo)
@@ -109,7 +79,7 @@ void	*routine(void *arg)
 		{
 			break ;
 		}
-		msg(philo->manager, philo->id, "is thinking");//philo think
+		msg(philo->manager, philo->id, "is thinking");
 	}
 	return (NULL);
 }

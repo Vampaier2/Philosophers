@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:13:04 by xalves            #+#    #+#             */
-/*   Updated: 2026/04/23 22:30:44 by xalves           ###   ########.fr       */
+/*   Updated: 2026/04/24 13:49:56 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	init_arrforks(t_manager	*manager)
 	int	i;
 
 	i = 0;
-
 	manager->forks = ft_calloc(sizeof(pthread_mutex_t), \
 manager->param.n_philos);
 	if (manager->forks == NULL)

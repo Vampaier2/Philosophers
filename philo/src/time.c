@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:06:43 by xalves            #+#    #+#             */
-/*   Updated: 2026/04/23 22:44:25 by xalves           ###   ########.fr       */
+/*   Updated: 2026/04/24 14:11:51 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,17 @@ long	time_since_last_eat(t_philo *philo)
 	time = ft_get_time() - philo->last_time_eat;
 	pthread_mutex_unlock(&philo->manager->eating_mutex);
 	return (time);
+}
+
+void	accurate_sleep(t_manager *manager, long time)
+{
+	long	start;
+
+	start = ft_get_time();
+	while (ft_get_time() - start < time)
+	{
+		if (checkis_anyone_dead(manager) == true)
+			return ;
+		usleep(500);
+	}
 }

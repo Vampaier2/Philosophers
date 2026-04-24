@@ -6,7 +6,7 @@
 /*   By: xalves <xalves@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 14:47:11 by xalves            #+#    #+#             */
-/*   Updated: 2026/04/23 22:32:51 by xalves           ###   ########.fr       */
+/*   Updated: 2026/04/24 15:36:24 by xalves           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,11 @@ int	check_time_to_die(t_manager *manager)
 	long	last_eat;
 
 	id = 0;
-
 	while (id < manager->param.n_philos)
 	{
 		pthread_mutex_lock(&manager->eating_mutex);
 		last_eat = manager->arr_philos[id].last_time_eat;
 		pthread_mutex_unlock(&manager->eating_mutex);
-
 		if ((ft_get_time() - last_eat) > manager->param.time_to_die)
 		{
 			pthread_mutex_lock(&manager->checkdead_mutex);
@@ -34,7 +32,7 @@ int	check_time_to_die(t_manager *manager)
 			pthread_mutex_unlock(&manager->checkdead_mutex);
 			pthread_mutex_lock(&manager->print_mutex);
 			time = get_timesincestart(manager->pstart_time);
-			printf("%ld %d died\n", time, id); 
+			printf("%ld %d died\n", time, id + 1);
 			pthread_mutex_unlock(&manager->print_mutex);
 			return (1);
 		}
@@ -42,7 +40,6 @@ int	check_time_to_die(t_manager *manager)
 	}
 	return (0);
 }
-
 
 int	check_philo_limit_eat(t_manager *manager)
 {
