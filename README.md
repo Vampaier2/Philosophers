@@ -36,11 +36,11 @@ make re
 ### Examples
 Normal philosopher simulation:
 ```bash
-./philo 5 800 200 200
+./philo 7 800 200 200
 ```
-This will create a simulation with 5 philosophers which have 800ms `time_to_die`, 200ms `time_to_eat`, 200ms `time_to_sleep`.
+This will create a simulation with 7 philosophers which have 800ms `time_to_die`, 200ms `time_to_eat`, 200ms `time_to_sleep`.
 ```bash
-./philo 5 800 200 200 8
+./philo 7 800 200 200 8
 ```
 Same as previous one, but now `number_oftotal_meals` is 8, so the simulation will only stop when **at least** all of the philosophers have eaten 8 times(eating 8 times).
 
@@ -55,7 +55,7 @@ make fclean
 ```
 
 ## Resources
-- [Youtube Code Vault -> Unix Threads in C](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2)
+- [Youtube Code Vault -> Unix Threads in C](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt7AS4FmuQf70psXrsMLEDQXNkLq2)
 - [Dining philosophers problem - Wikipedia](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
 - [pthread_mutex_init(3) — Linux manual page](https://www.man7.org/linux/man-pages/man3/pthread_mutex_lock.3.html)
 - 42 Philosophers en.subject.pdf
