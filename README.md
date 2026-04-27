@@ -5,7 +5,7 @@ Simulation of the classic Dining Philosophers problem.
 
 ## “Description”
 Simulates a configurable number of philosophers, each running in a concurrent process where they eat, sleep, and think.
-With each philosopher having _only 1 'fork'_ each, and they can only eat when they have 2 forks. (their fork on the fork of the other philosopher in the opposite side of their fork) 
+With each philosopher having _only 1 'fork'_ each, and they can only eat when they have 2 forks. (They need to check if the fork to their left/right, is available to grab it and use it).
 If the other fork is being used by another philosopher, the philosopher must wait until he has that fork available for use.
 
 ## “Instructions”
