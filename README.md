@@ -24,17 +24,17 @@ make re
 ### Argumets
 
 ```bash
-./philo n_philos time_to_die time_to_eat time_to_sleep [count_eat]
+./philo n_philos time_to_die time_to_eat time_to_sleep [number_oftotal_meals]
 ```
 
 - `n_philos` -> The number of philosophers and also the number of forks.
 - `time_to_die (in milliseconds)` -> if a philosopher has not started eating within `time_to_die milliseconds` since the start of their last meal or the start of the simulation, they die.
 - `time_to_eat (in milliseconds)` -> The time it takes for a philosopher to eat.
 - `time_to_sleep (in milliseconds)` -> The time a philosopher will spend sleeping.
-- `count_eat (optional argument)` -> If all philosophers have eaten at least `count_eat`, the simulation stops.(If not specified, the simulation stops when a philosopher dies).
+- `number_oftotal_meals (optional argument)` -> If all philosophers have eaten **at least** `number_oftotal_meals`, the simulation stops.(If not specified, the simulation stops when a philosopher dies).
 
 ### Examples
-Basic philosopher simulation:
+Normal philosopher simulation:
 ```bash
 ./philo 5 800 200 200
 ```
@@ -42,7 +42,7 @@ This will create a simulation with 5 philosophers which have 800ms `time_to_die`
 ```bash
 ./philo 5 800 200 200 8
 ```
-Same as above, but now `count_eat` is 8, so they will only stop after 8 repeats(eating 8 times).
+Same as previous one, but now `number_oftotal_meals` is 8, so the simulation will only stop when **at least** all of the philosophers have eaten 8 times(eating 8 times).
 
 ### Cleanup
 Remove object files:
